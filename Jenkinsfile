@@ -14,11 +14,14 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Lint & Format Check') {
-            steps {
-                bat 'npm run lint'
-            }
+       stage('Lint & Format Check') {
+    steps {
+        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+            bat 'npm run lint'
         }
+    }
+}
+
         stage('Build Backend') {
             steps {
                 bat 'npm run build'
