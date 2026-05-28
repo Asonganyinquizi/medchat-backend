@@ -9,6 +9,7 @@ pipeline {
         CI = 'true'
     }
 
+
     stages {
         stage('Checkout') {
             steps {
