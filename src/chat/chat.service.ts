@@ -12,7 +12,10 @@ import type { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/complet
 import { Message, MessageRole } from '@prisma/client';
 import { MessageService } from '../message/message.service';
 import { SessionService } from '../session/session.service';
-import { ChatHistoryMessageDto, ChatResponseDto } from './dto/chat-response.dto';
+import {
+  ChatHistoryMessageDto,
+  ChatResponseDto,
+} from './dto/chat-response.dto';
 
 const MEDICAL_SYSTEM_PROMPT = `You are a Medical Research Assistant. You help medical students, researchers, and healthcare professionals understand biomedical concepts, clinical research, drug mechanisms, disease pathophysiology, and medical literature.
 
@@ -39,11 +42,15 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {
     this.groq = new Groq({
-      apiKey: this.configService.get<string>('GROQ_API_KEY') ?? 'missing-api-key',
+      apiKey:
+        this.configService.get<string>('GROQ_API_KEY') ?? 'missing-api-key',
     });
   }
 
-  async sendMessage(sessionId: string, rawMessage: string): Promise<ChatResponseDto> {
+  async sendMessage(
+    sessionId: string,
+    rawMessage: string,
+  ): Promise<ChatResponseDto> {
     const sanitizedMessage = this.sanitizeUserMessage(rawMessage);
     await this.sessionService.ensureSession(sessionId);
 
@@ -106,7 +113,9 @@ export class ChatService {
     }
   }
 
-  async getSessionMessages(sessionId: string): Promise<ChatHistoryMessageDto[]> {
+  async getSessionMessages(
+    sessionId: string,
+  ): Promise<ChatHistoryMessageDto[]> {
     await this.sessionService.ensureSession(sessionId);
     const messages = await this.messageService.getMessagesBySession(sessionId);
 
@@ -138,6 +147,7 @@ export class ChatService {
 
   private sanitizeUserMessage(message: string): string {
     return message
+      // eslint-disable-next-line no-control-regex -- intentionally strips control characters from user input
       .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
       .replace(/\s+/g, ' ')
       .trim();
@@ -176,7 +186,9 @@ export class ChatService {
     }
 
     if (status && status >= 500) {
-      throw new BadGatewayException('Groq AI service returned an upstream error.');
+      throw new BadGatewayException(
+        'Groq AI service returned an upstream error.',
+      );
     }
 
     throw new ServiceUnavailableException(

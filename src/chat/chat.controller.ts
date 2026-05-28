@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ChatService } from './chat.service';
 import { ChatRequestDto } from './dto/chat-request.dto';
-import { ChatHistoryMessageDto, ChatResponseDto } from './dto/chat-response.dto';
+import {
+  ChatHistoryMessageDto,
+  ChatResponseDto,
+} from './dto/chat-response.dto';
 
 @Controller('api/chat')
 export class ChatController {
@@ -10,7 +20,9 @@ export class ChatController {
 
   @Post()
   @Throttle({ default: { limit: 20, ttl: 60_000 } })
-  sendMessage(@Body() chatRequestDto: ChatRequestDto): Promise<ChatResponseDto> {
+  sendMessage(
+    @Body() chatRequestDto: ChatRequestDto,
+  ): Promise<ChatResponseDto> {
     return this.chatService.sendMessage(
       chatRequestDto.sessionId,
       chatRequestDto.message,

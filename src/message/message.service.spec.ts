@@ -12,7 +12,7 @@ type MessageRepositoryMock = {
 
 function createRepositoryMock(): MessageRepositoryMock {
   return {
-    create: jest.fn((message: Partial<Message>) => message as Message),
+    create: jest.fn((message: Partial<Message>) => message),
     save: jest.fn(async (message: Message) => message),
     find: jest.fn(),
   };

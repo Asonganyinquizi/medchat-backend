@@ -30,9 +30,19 @@ function createChatService() {
     getMessagesBySession: jest.fn(),
     saveMessage: jest.fn(),
   } as unknown as jest.Mocked<MessageService>;
-  const service = new ChatService(configService, sessionService, messageService);
+  const service = new ChatService(
+    configService,
+    sessionService,
+    messageService,
+  );
   const groqCreate = jest.fn(async () => ({
-    choices: [{ message: { content: 'Metformin primarily reduces hepatic glucose output.' } }],
+    choices: [
+      {
+        message: {
+          content: 'Metformin primarily reduces hepatic glucose output.',
+        },
+      },
+    ],
   }));
   const groqClient: MockGroqClient = {
     chat: {
@@ -139,7 +149,10 @@ describe('ChatService', () => {
     const { service, messageService, groqCreate } = createChatService();
     messageService.getMessagesBySession.mockResolvedValue([]);
     messageService.saveMessage.mockResolvedValue({} as Message);
-    groqCreate.mockRejectedValue({ status: 429, message: 'Rate limit exceeded' });
+    groqCreate.mockRejectedValue({
+      status: 429,
+      message: 'Rate limit exceeded',
+    });
 
     await expect(
       service.sendMessage(

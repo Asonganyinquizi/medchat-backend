@@ -34,7 +34,9 @@ describe('SessionService', () => {
     repository.findOne.mockResolvedValue(session);
 
     await expect(service.getSession(session.id)).resolves.toBe(session);
-    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: session.id } });
+    expect(repository.findOne).toHaveBeenCalledWith({
+      where: { id: session.id },
+    });
   });
 
   it('creates a session when ensureSession cannot find one', async () => {
