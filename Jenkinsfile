@@ -24,6 +24,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
+                bat 'npx prisma generate'
                 bat 'npm run build'
             }
         }
