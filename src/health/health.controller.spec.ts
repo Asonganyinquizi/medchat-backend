@@ -1,9 +1,28 @@
 import { HealthController } from './health.controller';
 
 describe('HealthController', () => {
-  it('returns an ok health payload', () => {
-    const controller = new HealthController();
+  let controller: HealthController;
 
-    expect(controller.getHealth()).toMatchObject({ status: 'ok' });
+  beforeEach(() => {
+    controller = new HealthController();
+  });
+
+  it('returns status ok', () => {
+    const result = controller.getHealth();
+    expect(result.status).toBe('ok');
+  });
+
+  it('returns a valid ISO timestamp', () => {
+    const result = controller.getHealth();
+    expect(new Date(result.timestamp).toISOString()).toBe(result.timestamp);
+  });
+
+  it('returns a fresh timestamp on each call', async () => {
+    const first = controller.getHealth();
+    await new Promise((r) => setTimeout(r, 10));
+    const second = controller.getHealth();
+    expect(new Date(second.timestamp).getTime()).toBeGreaterThanOrEqual(
+      new Date(first.timestamp).getTime(),
+    );
   });
 });

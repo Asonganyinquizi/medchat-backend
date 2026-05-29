@@ -146,11 +146,13 @@ export class ChatService {
   }
 
   private sanitizeUserMessage(message: string): string {
-    return message
-      // eslint-disable-next-line no-control-regex -- intentionally strips control characters from user input
-      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+    return (
+      message
+        // eslint-disable-next-line no-control-regex -- intentionally strips control characters from user input
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+    );
   }
 
   private getErrorStatus(error: unknown): number | undefined {
