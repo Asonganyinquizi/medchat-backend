@@ -24,13 +24,15 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                bat 'npx prisma generate'
-                bat 'npm run build'
+                withEnv(['DATABASE_URL=postgresql://postgres:postgres@localhost:5432/medchat']) {
+                    bat 'npx prisma generate'
+                    bat 'npm run build'
+                }
             }
         }
         stage('Deploy Backend') {
             steps {
-                bat 'npm start'
+                bat 'npm run dev'
             }
         }
     }
