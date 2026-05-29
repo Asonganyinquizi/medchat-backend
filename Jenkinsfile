@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy Backend') {
             steps {
-                bat 'npm run dev'
+                bat 'start /B npm start'
             }
         }
     }
