@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.*
+coverage
+*.log
+
+# Prisma config compiled artifacts (use .ts source only)
+prisma.config.js
+prisma.config.js.map
+prisma.config.d.ts
