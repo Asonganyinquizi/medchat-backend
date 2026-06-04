@@ -1,24 +1,31 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl
 
+# Copy package files
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Install dependencies
+RUN npm install
+
+# Copy application code
 COPY . .
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Build the application
 RUN npm run build
 
-FROM node:20-alpine AS runner
+# Expose port
+EXPOSE 4003
 
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3001
+# Start the application
+# CMD ["npm", "start"]
 
-COPY package*.json ./
-RUN npm ci --omit=dev --ignore-scripts
-
-COPY --from=builder /app/dist ./dist
-
-EXPOSE 3001
-
-CMD ["node", "dist/main.js"]
+# This runs migrations to create tables BEFORE starting your app
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
