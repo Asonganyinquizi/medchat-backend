@@ -12,7 +12,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 function parseCorsOrigins(frontendUrl?: string): string[] {
-  const defaults = ['http://localhost:3000'];
+  const defaults = ['http://localhost:3000', 'https://medai-virid.vercel.app'];
 
   if (!frontendUrl) {
     return defaults;
